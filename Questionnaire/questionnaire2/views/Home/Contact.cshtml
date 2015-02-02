@@ -1,0 +1,5 @@
+﻿@model IList<Questionnaire2.Models.AppSetting>
+
+<div class="pageIntro">
+    @Html.Raw(Model.Where(XhtmlMobileDocType => XhtmlMobileDocType.AppSettingName == "Contact Info").FirstOrDefault().AppSettingValue)
+</div>

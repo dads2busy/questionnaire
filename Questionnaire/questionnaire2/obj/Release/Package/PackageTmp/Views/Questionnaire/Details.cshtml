@@ -1,0 +1,87 @@
+﻿@model Questionnaire2.ViewModels.QuestionnaireDetailData
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Questionnaire</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Questionnaire.QuestionnaireName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Questionnaire.QuestionnaireName)
+    </div>
+    Questions
+
+<div id="accordion">
+    @foreach (var category in Model.Questionnaire.QuestionnaireQCategories)
+    {
+    <h3>@category.QCategory.QCategoryName</h3>
+        <div>
+            <table>
+            @foreach (var item in Model.DetailRecords.Where(x => x.QCategory.QCategoryId == category.QCategoryId))
+            {
+                <tr>
+                    <td colspan="2">
+                        @if (item.Question.QTitle != null)
+                        {
+                            @item.Question.QTitle
+                        }
+                    </td>
+                </tr>
+                <tr> 
+                    <td>
+                        @item.Question.QuestionText
+                    </td>
+                    <td>
+                        @if (item.Question.QType.QTypeResponse == "DropDown")
+                        {
+                            @Html.DropDownList("answer", item.Answers, new { @id = item.Question.QuestionId })
+                        }
+                        @if (item.Question.QType.QTypeResponse == "FreeText")
+                        {
+                            @Html.TextBox("answer", null, new { @id = item.Question.QuestionId });
+                        }
+                        @if (item.Question.QType.QTypeResponse == "Date")
+                        {
+                            @Html.TextBox("answer", null, new { @class = "datefield", @id = item.Question.QuestionId });
+                        }
+                    </td>
+                    
+                </tr>
+            }
+            </table>
+        </div>
+    }
+</div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Questionnaire.QuestionnaireId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@section Scripts{
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".datefield").datepicker();
+        });
+    </script>
+    <script>
+        $(function () {
+            $("#accordion").accordion();
+        });
+    </script>
+    <script>
+        $('select').selectBox({
+            mobile: true,
+            menuSpeed: 'fast'
+        });
+    </script>
+
+    
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+}

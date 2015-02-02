@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Questionnaire2.Models.Question>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<fieldset>
+    <legend>Manage Available Questions</legend>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="availableQuestions">
+        <tr>
+            <th style="width: 500px; padding: 5px">
+                @Html.DisplayNameFor(model => model.QuestionText)
+            </th>
+            <th style="padding: 5px; width: 125px">
+                @Html.DisplayNameFor(model => model.QTitle)
+            </th>
+            <th style="padding: 5px; width: 125px">
+                @Html.DisplayNameFor(model => model.QTypeName)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width: 500px; padding: 5px">
+                    @Html.DisplayFor(modelItem => item.QuestionText)
+                </td>
+                <td style="padding: 5px">
+                    @Html.DisplayFor(modelItem => item.QTitle)
+                </td>
+                <td style="padding: 5px">
+                    @Html.DisplayFor(modelItem => item.QTypeName)
+                </td>
+                <td style="width: 150px; padding: 5px">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.QuestionId }) |
+                    @*@Html.ActionLink("Details", "Details", new { id = item.QuestionId }) |*@
+                    @Html.ActionLink("Delete", "Delete", new { id = item.QuestionId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</fieldset>
+    @section Scripts {
+        <script type="text/javascript">
+            $("tr:odd").css("background-color", "White");
+            $("tr:even").css("background-color", "White");
+        </script>
+    }

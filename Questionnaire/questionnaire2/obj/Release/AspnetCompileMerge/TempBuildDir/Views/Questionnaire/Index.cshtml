@@ -1,0 +1,56 @@
+﻿@model Questionnaire2.ViewModels.QuestionnaireIndexData
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Questionnaires.First().QuestionnaireName)
+        </th>        
+    </tr>
+
+@foreach (var item in Model.Questionnaires) {
+    <tr>        
+        <td>
+            @Html.ActionLink("Select", "Index", new { id=item.QuestionnaireId }) |
+            @Html.ActionLink("Edit", "Edit", new { id=item.QuestionnaireId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.QuestionnaireId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.QuestionnaireId })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuestionnaireName)
+        </td>
+    </tr>
+}
+</table>
+
+@if (Model.Questions != null)
+{ 
+    <h3>Questions</h3> 
+    <table> 
+        <tr> 
+            <th>@Html.DisplayNameFor(model => model.Questions.First().QuestionText)</th> 
+            <th>@Html.DisplayNameFor(model => model.Questions.First().QTypeName)</th> 
+        </tr>
+ 
+        @foreach (var item in Model.Questions)
+        {
+        <tr> 
+            <td> 
+                @item.QuestionText
+            </td> 
+            <td> 
+                @item.QTypeName
+            </td>
+        </tr> 
+        }
+    </table>
+}

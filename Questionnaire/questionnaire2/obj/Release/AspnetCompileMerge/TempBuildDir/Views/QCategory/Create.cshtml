@@ -1,0 +1,59 @@
+﻿@model Questionnaire2.Models.QCategory
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>QCategory</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.QCategoryName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.QCategoryName)
+            @Html.ValidationMessageFor(model => model.QCategoryName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Instructions)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Instructions)
+            @Html.ValidationMessageFor(model => model.Instructions)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Repeatable)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Repeatable)
+            @Html.ValidationMessageFor(model => model.Repeatable)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Uploads)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Uploads)
+            @Html.ValidationMessageFor(model => model.Uploads)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

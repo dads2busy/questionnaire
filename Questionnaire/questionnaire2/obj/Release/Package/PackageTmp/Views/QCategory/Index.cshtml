@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Questionnaire2.Models.QCategory>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<fieldset>
+    <legend>Manage Available Sections</legend>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table id="alternateBG" class="availableSections">
+        <tr>
+            <th style="vertical-align:top; padding: 5px">
+                @Html.DisplayNameFor(model => model.QCategoryName)
+            </th>
+            <th style="vertical-align:top; padding: 5px">
+                @Html.DisplayNameFor(model => model.Instructions)
+            </th>
+            <th style="vertical-align:top; padding: 5px">
+                @Html.DisplayNameFor(model => model.Repeatable)
+            </th>
+            <th style="vertical-align:top; padding: 5px">
+                @Html.DisplayNameFor(model => model.Uploads)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="vertical-align:top; padding: 5px">
+                    @Html.DisplayFor(modelItem => item.QCategoryName)
+                </td>
+                <td style="vertical-align:top; padding: 5px">
+                    @Html.Raw(item.Instructions)
+                </td>
+                <td style="vertical-align:top; padding: 5px">
+                    @Html.Raw(item.Repeatable)
+                </td>
+                <td style="vertical-align:top; padding: 5px">
+                    @Html.Raw(item.Uploads)
+                </td>
+                <td style="vertical-align:top; padding: 5px; width: 150px">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.QCategoryId }) |
+                    @*@Html.ActionLink("Details", "Details", new { id = item.QCategoryId }) |*@
+                    @Html.ActionLink("Delete", "Delete", new { id = item.QCategoryId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</fieldset>
+    @section Scripts {
+        <script type="text/javascript">
+            $("tr:odd").css("background-color", "White");
+            $("tr:even").css("background-color", "White");
+        </script>
+    }

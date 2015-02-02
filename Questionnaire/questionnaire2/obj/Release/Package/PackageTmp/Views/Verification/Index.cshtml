@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Questionnaire2.ViewModels.UserInfo>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Users Awaiting Verification</h2>
+
+<table style="width: 50%">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().LastName)
+        </th>
+        <th>
+            Status
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.HiddenFor(modelItem => item.UserId)
+            @Html.Raw(item.UserName)
+        </td>
+        <td>
+            @Html.Raw(item.FirstName)
+        </td>
+        <td>
+            @Html.Raw(item.LastName)
+        </td>
+        <td>
+            @Html.Raw(item.VerifiedCount)/@Html.Raw(item.VerifiedCount + item.UnverifiedCount)
+        </td>
+        <td>
+            @Html.ActionLink("Application", "List", new { id=item.UserId })
+            @* | @Html.ActionLink("Delete", "Delete", new { id=item.UserId })*@
+        </td>
+    </tr>
+}
+
+</table>

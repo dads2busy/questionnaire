@@ -1,0 +1,89 @@
+﻿@model Questionnaire2.ViewModels.VmVerificationItems
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Verification Category</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Verification</legend>
+
+        @Html.HiddenFor(model => model.VerificationItems.First().Verification.Id)
+        @Html.HiddenFor(model => model.VerificationItems.First().Verification.QuestionnaireId)
+        @Html.HiddenFor(model => model.VerificationItems.First().Verification.UserId)
+        @Html.HiddenFor(model => model.VerificationItems.First().Verification.QCategoryId)
+        @Html.HiddenFor(model => model.VerificationItems.First().Verification.SubOrdinal)
+        @Html.HiddenFor(model => model.VerificationItems.First().Verification.ItemInfo)
+        @Html.HiddenFor(model => model.VerificationItems.First().Verification.QQCategoryId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VerificationItems.First().Verification.ItemInfo)
+        </div>
+        <div class="editor-field">
+            @Html.Raw(Model.VerificationItems.First().Verification.ItemInfo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VerificationItems.First().Verification.ItemVerified)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.VerificationItems.First().Verification.ItemVerified)
+            @Html.ValidationMessageFor(model => model.VerificationItems.First().Verification.ItemVerified)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VerificationItems.First().Verification.ItemStepLevel)
+        </div>
+        <div class="editor-field">
+            @{
+                var itemStepLevel = Model.VerificationItems.First().Verification.ItemStepLevel;
+                //var dataValueField = Model.LatticeItems.First().Value;
+                //var dataTextField = Model.LatticeItems.First().Text;
+            }
+            @Html.DropDownListFor(model => model.VerificationItems.First().Verification.ItemStepLevel, new SelectList(Model.LatticeItems, "Value" , "Text", itemStepLevel), "Select a Step-Level", new { @style = "font-size: 12px" })
+            @Html.ValidationMessageFor(model => model.VerificationItems.First().Verification.ItemStepLevel)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VerificationItems.First().Verification.Notes)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.VerificationItems.First().Verification.Notes)
+            @Html.ValidationMessageFor(model => model.VerificationItems.First().Verification.Notes)
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VerificationItems.First().Files)
+        </div>
+        <div class="editor-field">
+            @foreach (var file in Model.VerificationItems.First().Files)
+            {
+                @Html.ActionLink(file.FileName, "DownloadFile", "Verification", new { id = file.FileId, vId = Model.VerificationItems.First().Verification.Id }, null)<br />
+            }
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.VerificationItems.First().Verification.Editable)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.VerificationItems.First().Verification.Editable)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

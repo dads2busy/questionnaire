@@ -1,0 +1,62 @@
+﻿@model Questionnaire2.Models.QuestionnaireQCategory
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>QuestionnaireQCategory</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.QuestionnaireId, "Questionnaire")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("QuestionnaireId", String.Empty)
+            @Html.ValidationMessageFor(model => model.QuestionnaireId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.QCategoryId, "QCategory")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("QCategoryId", String.Empty)
+            @Html.ValidationMessageFor(model => model.QCategoryId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Ordinal)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Ordinal)
+            @Html.ValidationMessageFor(model => model.Ordinal)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SubOrdinal)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SubOrdinal)
+            @Html.ValidationMessageFor(model => model.SubOrdinal)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

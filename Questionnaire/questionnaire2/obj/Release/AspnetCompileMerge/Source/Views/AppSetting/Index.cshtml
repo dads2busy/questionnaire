@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Questionnaire2.Models.AppSetting>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<fieldset>
+    <legend>Website Settings</legend>
+
+    @*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+    <table class="websiteSettings">
+        <tr>
+            <th style="vertical-align:top; padding: 5px">
+                @Html.DisplayNameFor(model => model.AppSettingName)
+            </th>
+            <th style="vertical-align:top; padding: 5px">
+                @Html.DisplayNameFor(model => model.AppSettingValue)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="vertical-align:top; width: 200px; padding: 5px">
+                    <br />@Html.DisplayFor(modelItem => item.AppSettingName)
+                </td>
+                <td style="vertical-align:top; padding: 5px">
+                    @Html.Raw(item.AppSettingValue)
+                </td>
+                <td style="vertical-align:top; width: 125px; padding: 5px">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.AppSettingId }) |
+                    @*@Html.ActionLink("Details", "Details", new { id = item.AppSettingId }) |*@
+                    @Html.ActionLink("Delete", "Delete", new { id = item.AppSettingId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</fieldset>
+@section Scripts {
+    <script type="text/javascript">
+            $("tr:odd").css("background-color", "White");
+            $("tr:even").css("background-color", "White");
+    </script>
+}

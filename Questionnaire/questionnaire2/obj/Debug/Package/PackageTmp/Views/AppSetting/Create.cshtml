@@ -1,0 +1,44 @@
+﻿@model Questionnaire2.Models.AppSetting
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>AppSetting</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AppSettingName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AppSettingName)
+            @Html.ValidationMessageFor(model => model.AppSettingName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AppSettingValue)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AppSettingValue)
+            @Html.ValidationMessageFor(model => model.AppSettingValue)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,42 @@
+﻿@model Questionnaire2.ViewModels.VmVerificationItems
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>Application Verification Status</h2>
+
+<table>
+    <tr>
+        <th style="vertical-align:top; padding: 5px 5px 5px 5px;">Item Information</th>
+        <th style="vertical-align:top; padding: 5px 5px 5px 5px;">Supporting Files</th>
+        <th style="vertical-align:top; padding: 5px 5px 5px 5px;">Verification</th>
+    </tr>
+
+@foreach (var item in Model.VerificationItems) {
+    <tr style="font-size: 12px;">
+        <td style="vertical-align:top; border: 1px solid gray; padding: 5px 5px 5px 5px;">
+            @Html.Raw(item.Verification.ItemInfo)            
+            @Html.HiddenFor(model => item.Verification.QuestionnaireId)
+            @Html.HiddenFor(model => item.Verification.UserId)
+            @Html.HiddenFor(model => item.Verification.QCategoryId)
+            @Html.HiddenFor(model => item.Verification.SubOrdinal)        
+        </td>
+        <td style="vertical-align:top; border: 1px solid gray; padding: 5px 5px 5px 5px;">
+            @foreach (var file in item.Files)
+            {
+                <p>@Html.DisplayFor(fileItem => file.FileName)</p>
+            } 
+        </td>
+        <td style="vertical-align:top; border: 1px solid gray; padding: 5px 5px 5px 5px; width: 25%">
+            <p>Verified: @Html.DisplayFor(modelItem => item.Verification.ItemVerified)</p>
+            @*<p>Editable: @Html.DisplayFor(modelItem => item.Verification.Editable)</p>*@
+            <p>Step-Level: @Html.DisplayFor(modelItem => item.Verification.ItemStepLevel)</p>
+            @*@Html.DropDownList("stepLevel", Model.LatticeItems, "Select a Step-Level", new { @style = "font-size: 11px" })*@
+            @*<p>Notes: @Html.DisplayFor(modelItem => item.Verification.Notes)</p>*@           
+            @*<p>@Html.ActionLink("Details", "Details", new {id = item.Id})</p>
+            <p>@Html.ActionLink("Delete", "Delete", new {id = item.Id})</p>*@
+        </td>
+    </tr>
+}
+</table>

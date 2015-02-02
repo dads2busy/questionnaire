@@ -1,0 +1,25 @@
+﻿@model Questionnaire2.ViewModels.File2DB
+
+
+<h2>Uploads</h2>
+
+@using (Html.BeginForm("Upload", null, FormMethod.Get, new { }))
+{
+    @Html.AntiForgeryToken()
+    <table>
+        <tr>
+            <th>
+                @Html.EditorFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.EditorFor(model => model.QuestionnaireId)
+            </th>
+            <th>
+                @Html.EditorFor(model => model.QuestionnaireQCategoryId)
+            </th>
+            <th>
+                <input type="submit" value="Go" />
+            </th>
+        </tr>
+    </table>
+}

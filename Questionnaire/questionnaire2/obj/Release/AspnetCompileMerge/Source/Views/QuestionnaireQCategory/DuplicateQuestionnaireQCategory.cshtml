@@ -1,0 +1,21 @@
+﻿@model Questionnaire2.Models.QuestionnaireQCategory
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Confirm Create</h2>
+
+@using (Html.BeginForm("DuplicateQuestionnaireQCategory", "QuestionnaireQCategory", FormMethod.Post))
+{
+    <fieldset>
+        <legend></legend>
+    <p>
+        
+        Confirm add new section?
+        @Html.HiddenFor(model => model.Ordinal)
+        <input type="submit" value="Confirm" />
+    </p>
+    </fieldset>
+}
+

@@ -1,0 +1,18 @@
+﻿@model IList<Questionnaire2.Models.AppSetting>
+
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <div class="pageIntro">
+                <h1><img src="~/Images/VDSS_logo_2013.png" style="float:left; margin-bottom:10px; padding: 10px 0 0 10px" />
+                    @Html.Raw(Model.Where(XhtmlMobileDocType=>XhtmlMobileDocType.AppSettingName=="Title Message").FirstOrDefault().AppSettingValue)
+                </h1>
+                <h4>@Html.Raw(Model.Where(XhtmlMobileDocType=>XhtmlMobileDocType.AppSettingName=="Application Description").FirstOrDefault().AppSettingValue)</h4>
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts{    
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+}

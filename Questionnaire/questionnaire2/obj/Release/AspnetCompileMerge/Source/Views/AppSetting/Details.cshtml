@@ -1,0 +1,29 @@
+﻿@model Questionnaire2.Models.AppSetting
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>AppSetting</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AppSettingName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AppSettingName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AppSettingValue)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AppSettingValue)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.AppSettingId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

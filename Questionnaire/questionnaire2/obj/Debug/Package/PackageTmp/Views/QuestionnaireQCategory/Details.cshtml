@@ -1,0 +1,43 @@
+﻿@model Questionnaire2.Models.QuestionnaireQCategory
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>QuestionnaireQCategory</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Questionnaire.QuestionnaireName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Questionnaire.QuestionnaireName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.QCategory.QCategoryName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.QCategory.QCategoryName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Ordinal)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Ordinal)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SubOrdinal)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SubOrdinal)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

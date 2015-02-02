@@ -1,0 +1,91 @@
+﻿@model Questionnaire2.Models.RegisterModel
+@{
+    ViewBag.Title = "Register";
+}
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <script type="text/javascript">
+        EnableSubmit = function (val) {
+            var sbmt = document.getElementById("sbmt");
+
+            if (val.checked == true) {
+                sbmt.disabled = false;
+            }
+            else {
+                sbmt.disabled = true;
+            }
+        }
+    </script>
+    
+    <fieldset>
+        <legend>Create an Account</legend>
+        <table style="width:100%">
+            <tr style="vertical-align:top">
+                <td style="padding-left: 15px; width:35%">
+                    <ol>
+                        <li>
+                            @Html.LabelFor(m => m.UserName)
+                            @Html.TextBoxFor(m => m.UserName)
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.Password)
+                            @Html.PasswordFor(m => m.Password)
+                        </li>
+                        <li>
+                            @Html.LabelFor(m => m.ConfirmPassword)
+                            @Html.PasswordFor(m => m.ConfirmPassword)
+                        </li>
+                    </ol>
+                    <input type="submit" id="sbmt" value="Register" disabled />
+                </td>
+                <td style="padding-right: 15px">
+                    <ol>
+                        <li style="font-style: italic">
+                            Acknowledgement Statement and Applicant Signature
+                        </li>
+                        <li>
+                            <textarea id="Acknowledgment" rows="20" style="width:100%; font-size: smaller; box-sizing:border-box">
+I certify that the information contained in this application is complete and accurate to the best of my knowledge.  I understand that this information will be entered and stored in the Virginia Professional Development Registry (VPDR) database.  I hereby agree to indemnify the Virginia Department of Social Services (DSS), its employees and agents for any claims made against them arising out of or connected with the information contained in my application and provided in conjunction with it.  Said indemnification shall also apply to any claims arising from my subsequent professional placement.  I understand that DSS is a public entity that is required to protect the confidentiality of personal information (Code of Virginia § 2.2 - 3801)to the extent permitted under state and federal law and regulation.
+
+DSS may collect the following personal information in the VPDR:
+* Name, Address, Telephone/Fax numbers, e-mail and birth date
+* Employment history
+* Education/training history
+                                
+I understand there is the potential for disclosure of non-personal information in response to a Freedom of Information Act (FOIA) request.
+
+I recognize that my continuing membership with or participation in the VPDR is on an annual renewal basis.  I will submit all information requested within the application or renewal period.  Should I receive a written request for clarification of the submitted documentation, I will cooperate fully with the staff of DSS and its authorized agent(s) and submit this requested information within 30 days of the written request.
+
+I understand that documentation that cannot be verified will not be considered in my Career Lattice Step Level placement.
+
+I understand that my name will not be released to advertisers.  Social security numbers will be masked in the VPDR and will not be provided to any partners for any reason.   
+
+I understand that the authorized entity will provide me the user with secure access to view my information through the System.
+
+I understand that the host entity requires secure communication via internet browser for all users of the System.  These security levels shall remain current with the requirements of all state and federal laws related to electronic access and database storage by governmental entities.
+
+I understand that the information in my file may be used for the following purposes:
+* The compilation and publication of group data reports and recognition of a member’s educational attainments.
+* The release of aggregate data compiled to aid planning and education efforts to increase the quality and services of the early childhood development and school-age care community.
+* The sharing of education, training and work-related history with my current employer and with regulatory staff in the Division of Licensing Programs, DSS.
+
+I understand that I can request, in writing, to opt out of the VPDR at any time.  Opting out will result in the termination of my individual membership and/or authorization.
+
+I understand that when I opt out my membership in the VPDR will be terminated.  My Registry-specific data will be archived in the data system in case I choose to reinstate my participation in the Registry, but it will not be used for any purpose.  I would then be considered a ‘non-member.
+                            </textarea>
+                            <br />
+                            <input type="checkbox" name="agree" value="Accept" onclick="EnableSubmit(this)" /> I Agree
+                        </li>
+                    </ol>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

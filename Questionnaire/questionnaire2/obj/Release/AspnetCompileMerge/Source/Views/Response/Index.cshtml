@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Questionnaire2.Models.Response>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.QuestionnaireId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuestionText)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuestionnaireQuestionId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QCategoryId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QCategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ordinal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubOrdinal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ResponseItem)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuestionnaireId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuestionText)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QuestionnaireQuestionId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QCategoryId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QCategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ordinal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubOrdinal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ResponseItem)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.UserId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.UserId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.UserId })
+        </td>
+    </tr>
+}
+
+</table>

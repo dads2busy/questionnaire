@@ -1,0 +1,173 @@
+﻿@using Microsoft.Ajax.Utilities
+@model Questionnaire2.ViewModels.QuestionnaireEditData
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("EditName", null, FormMethod.Post, new { }))
+{
+    <fieldset>
+        <legend>Questionnaire Name</legend>
+
+        @Html.HiddenFor(model => model.Questionnaire.QuestionnaireId)
+        <table class="questionnaireSectionTable">
+            <tr>
+                <td>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.Questionnaire.QuestionnaireName)
+                        @Html.ValidationMessageFor(model => model.Questionnaire.QuestionnaireName)
+                    </div>
+                </td>
+                <td>
+                    <input type="submit" value="Update Name" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </fieldset>
+}
+
+@using (Html.BeginForm("EditSections", null, FormMethod.Post, new { }))
+{
+    <fieldset>
+        <legend>Questionnaire Sections</legend>
+        <div id="message">@ViewBag.message</div>
+        @Html.HiddenFor(model => model.Questionnaire.QuestionnaireId)
+        <table class="questionnaireSectionTable">
+            <tr>
+                <td style="font-weight:bold">
+                    Add New Section to Application
+                </td>
+            </tr>
+            <tr>
+                <td class="selectedSectionAdd">
+                    @Html.DropDownList("selectedSectionAdd", Model.Sections, "Select Section To Add", new { @style = "width: 500px; height:30px" })
+                </td>
+                <td>
+                    <input type="submit" value="Update Sections" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+
+        <table class="questionnaireSectionTable">
+            <tr>
+                <td style="font-weight:bold">
+                    Current Questionnaire Sections
+                </td>
+            </tr>
+            @foreach (var item in Model.QuestionnaireSections)
+            {
+                <tr>
+                    <td>
+                        <div class="selectedSection">
+                            @Html.DisplayTextFor(x => item.Value)
+                        </div>
+                    </td>
+                    <td>
+                        <input type="checkbox"
+                                name="remove"
+                                value="@item.Key" /> Remove
+                </tr>
+            }
+        </table>
+    </fieldset>
+}
+
+@using (Html.BeginForm("Edit", null, FormMethod.Post, new { }))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Questionnaire Questions</legend>
+
+        <table class="questionnaireQuestionTable">
+            <tr>
+                <td style="font-weight:bold">
+                    Assign Questions to Application Sections
+                </td>
+            </tr>
+            <tr>
+                <td class="selectQuestion">
+                    @Html.DropDownList("selectedQuestionAdd", Model.QuestionDropDownLists.Single(x => x.Key == -1).Value, "Select Question To Add", new { @style = "width: 500px; height:30px" })
+                </td>
+                <td class="selectCategory">
+                    @Html.DropDownList("selectedQQCategoryAdd", Model.QCategoryDropDownLists.Single(x => x.Key == -1).Value, "Select Questionnaire Section", new { @style = "width: 250px; height:30px" })
+                </td>
+                <td>
+                    <input type="submit" value="Update Questions" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <table class="questionnaireQuestionTable">
+            <tr>
+                <td style="font-weight:bold">
+                    Assigned Questions
+                </td>
+            </tr>
+
+            @{ var recordCount = 0; }
+            @foreach (var item in Model.Questionnaire.QuestionnaireQuestions)
+            {
+                <tr>
+                    <td class="selectQuestion">
+                        @*@Html.DropDownList("selectedQuestion", Model.QuestionDropDownLists.Single(x => x.Key == item.Id).Value, new { @style = "width: 500px; height:30px" })*@
+                        @Html.DropDownListFor(x => item.QuestionId, Model.QuestionDropDownLists.Single(x => x.Key == item.Id).Value, new { @Name = "qQuestions[" + recordCount + "].QuestionId", @style = "width: 500px; height:30px" })
+                    </td>
+                    <td class="selectCategory">
+                        @*@Html.DropDownList("selectedQCategory", Model.QCategoryDropDownLists.Single(x => x.Key == item.Id).Value, new { @style = "width: 250px; height:30px" })*@
+                        @Html.DropDownListFor(x => item.QQCategoryId, Model.QCategoryDropDownLists.Single(x => x.Key == item.Id).Value, new { @Name = "qQuestions[" + recordCount + "].QQCategoryId", @style = "width: 500px; height:30px" })
+                    </td>
+                    <td class="selectedOrdinal">
+                        @Html.DropDownListFor(x => item.Ordinal, Model.OrdinalDropDownLists.Single(x => x.Key == item.Id).Value, new { @Name = "qQuestions[" + recordCount + "].Ordinal", @style = "width: 60px; height:30px" })
+                        @*Html.EditorFor(x => item.Ordinal, null,"selectedOrdinal", null)*@
+                    </td>
+                    <td class="selectedRemove">
+                        <input type="checkbox"
+                                name="remove"
+                                value="@item.Id"
+                                @*@Html.Raw(" checked=\"checked\"");*@ /> Remove
+
+                        @*@Html.HiddenFor(x => item.QQCategoryId, new { @Name = "qqCategoryId" })
+                            @Html.HiddenFor(x => item.Id, new { @Name = "qqId" })*@
+
+                        @Html.HiddenFor(x => item.Id, new { @Name = "qQuestions[" + recordCount + "].Id" })
+                        @Html.HiddenFor(x => item.UserId, new { @Name = "qQuestions[" + recordCount + "].UserId" })
+                        @Html.HiddenFor(x => item.Ordinal, new { @Name = "qQuestions[" + recordCount + "].Ordinal" })
+                        @Html.HiddenFor(x => item.QuestionnaireId, new { @Name = "qQuestions[" + recordCount + "].QuestionnaireId" })
+                        @*@Html.HiddenFor(x => item.QuestionId, new { @Name = "qQuestions[" + recordCount + "].QuestionId" })*@
+                        @*@Html.HiddenFor(x => item.QQCategoryId, new { @Name = "qQuestions[" + recordCount + "].QQCategoryId" })*@
+
+                    </td>
+                </tr>
+                recordCount++;
+            }
+        </table>
+
+    </fieldset>
+}
+
+    @section Scripts {
+        @*  <script type="text/javascript">
+                $(document).ready(function () {
+                    $(".datefield").datepicker();
+                });
+            </script>
+            <script>
+                $("#accordion").accordion({
+                    collapsible: true,
+                    active: false,
+                    heightStyle: "content",
+                    navigation: true
+                });
+                $("#accordion").accordion('option', 'active', 2);
+            </script>
+            <script>
+                $('select').selectBox({
+                    mobile: true,
+                    menuSpeed: 'fast'
+                });
+            </script>*@
+        @Scripts.Render("~/bundles/jqueryval")
+    }

@@ -1,0 +1,27 @@
+﻿@model IList<Questionnaire2.Models.Response>
+
+@{
+    ViewBag.Title = "Download";
+}
+
+<h2>Download Portfolio</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Download</legend>
+        <p>
+            <input type="submit" id="btnWord" name="Command" value="MS Word" /> <input type="submit" id="btnPdf" name="Command" value="Pdf" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

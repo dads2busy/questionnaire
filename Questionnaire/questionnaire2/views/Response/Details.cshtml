@@ -1,0 +1,71 @@
+﻿@model Questionnaire2.Models.Response
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Response</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.QuestionnaireId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.QuestionnaireId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.QuestionText)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.QuestionText)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.QuestionnaireQuestionId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.QuestionnaireQuestionId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.QCategoryId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.QCategoryId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.QCategoryName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.QCategoryName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Ordinal)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Ordinal)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SubOrdinal)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SubOrdinal)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ResponseItem)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ResponseItem)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.UserId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

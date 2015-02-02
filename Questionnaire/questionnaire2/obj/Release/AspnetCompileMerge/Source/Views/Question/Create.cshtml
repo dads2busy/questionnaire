@@ -1,0 +1,71 @@
+﻿@model Questionnaire2.Models.Question
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Question</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.QuestionText)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.QuestionText)
+            @Html.ValidationMessageFor(model => model.QuestionText)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.QTitle)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.QTitle)
+        </div>
+
+        <div class="editor-field">
+            @Html.DropDownList("selectedQType", new SelectList(ViewBag.qtypes))
+        </div>
+        
+@*        <div class="editor-field">
+            <table>
+                <tr>
+                    @{
+                        int cnt = 0;
+                        var qCreate = ViewBag.qtypes;
+                        foreach (var q in qCreate)
+                        {
+                            if (cnt++ % 3 == 0)
+                            {
+                                @: </tr><tr>
+                            }
+                            @: <td>
+                                <input type="checkbox"
+                                       name="selectedQTypes"
+                                       value="@q" />
+                                @q
+                            @: </td>
+                        }
+                        @: </tr>
+                    }
+            </table>
+        </div>*@
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

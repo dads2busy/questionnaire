@@ -1,0 +1,59 @@
+﻿@model Questionnaire2.ViewModels.File2DB
+
+@using (Html.BeginForm("Upload", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+        string activePanel = "";
+        if (Request.QueryString["activePanel"] != null)
+        { activePanel = Request.QueryString["activePanel"]; }
+        else if (TempData["activePanel"] != null)
+        { activePanel = TempData["activePanel"].ToString(); }
+        
+        <div>
+        @Html.LabelFor(x => x.File)
+        @Html.TextBoxFor(x => x.File, new { type = "file" })
+        @Html.ValidationMessageFor(x => x.File)
+        @Html.LabelFor(x => x.Description)
+        @Html.TextBoxFor(x => x.Description)
+
+        @Html.HiddenFor(x => Model.UserId)
+        @Html.HiddenFor(x => Model.QuestionnaireId)
+        @Html.HiddenFor(x => Model.QuestionnaireQCategoryId)
+        @Html.HiddenFor(x => Model.QCategorySubOrdinal)
+        @Html.HiddenFor(x => Model.QCategoryName)
+        @Html.Hidden("activePanel", activePanel)
+        
+                        
+
+    <button type="submit">Upload File</button>
+    </div>
+    <hr />
+    @Html.ActionLink("Return to Application", "Edit", "Response", new { area = "", @class="panelNumber", panel = activePanel }, null)
+}
+
+
+@using (Html.BeginForm("DownloadDelete", null, FormMethod.Post, new { }))
+{
+    <table class="selectTable">
+        <tr>
+            <th>Category</th>
+            <th>File Name</th>
+        </tr>
+    @foreach (var file in Model.UserFiles)
+    {
+        var delName = file.FileName + "_delete";
+        <tr class="fileUpload">
+            <td class="fileCategory">@file.QCategoryName</td>
+            <td class="fileName">@file.FileName</td>
+            <td class="fileDescription">@file.Description</td>
+            <td class="fileButton"><button type="submit" name="fileName" value="@file.FileName">download</button></td>
+            <td class="fileButton"><button type="submit" name="fileName" value="@delName" onclick="return confirm('Are you sure you wish to delete this file?');">delete</button></td>
+        </tr>
+    }
+    </table>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

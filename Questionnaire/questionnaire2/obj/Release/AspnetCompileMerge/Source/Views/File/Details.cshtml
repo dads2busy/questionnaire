@@ -1,0 +1,43 @@
+﻿@model Questionnaire2.Models.File
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>File</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UserId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UserId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.QuestionnaireId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.QuestionnaireId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.QuestionnaireQCategoryId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.QuestionnaireQCategoryId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FileName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FileName)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.FileId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,19 @@
+﻿@model bool
+
+@{
+    ViewBag.Title = "Verification";
+}
+
+<h2>Submit Application for Verification</h2>
+<p>Submitting your application for verification will send all of your application information as it is currently entered.</p>
+
+<div>@Html.ActionLink("Submit for Verification", "SendToVerification", "Verification", new {id = WebSecurity.GetUserId(User.Identity.Name)}, null)</div>
+
+@*@if (Model == false)
+{
+    <div>@Html.ActionLink("Submit for Verification", "SendToVerification", "Verification", new {id = WebSecurity.GetUserId(User.Identity.Name)}, null)</div>
+}
+else
+{
+    <div>It appears that you have already submitted your application for verification</div>
+}*@

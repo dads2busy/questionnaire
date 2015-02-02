@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Virginia Child Care Professional Registry</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/tinymce")
+        @Scripts.Render("~/bundles/jqueryval")
+        
+    </head>
+    <body>
+        <header id="header">
+            <div class="site-title">@Html.ActionLink("Virginia Professional Development Registry", "Index", "Home", new { area = "" }, null)</div>
+            <section id="login">
+                        @Html.Partial("_LoginPartial")
+            </section>
+            <div id="topnav">
+                <nav>
+                    
+                    <ul class="menu">
+                        @*<li>Administration: </li>*@
+                        <li>@if (Roles.IsUserInRole("CareProvider")) {
+                                @Html.ActionLink("Application", "Edit", "Response", new { area="", id = 1 }, null) }
+                        </li>
+                        <li>@if (Roles.IsUserInRole("CareProvider")) {
+                                @Html.ActionLink("Submit", "Verification", "Verification", new { area="" }, null) }
+                        </li>
+                        <li>@if (Roles.IsUserInRole("CareProvider")) {
+                                @Html.ActionLink("Status", "Status", "CareProvider", new { area = "" }, null) }
+                        </li>
+                        @if (Roles.IsUserInRole("CareProvider")) {
+                        <li>
+                                @Html.ActionLink("Download", "Download", "Response", new { area = "" }, null) 
+                        </li>
+                        <li>
+                            |
+                        </li>
+                        }
+                        @if (Roles.IsUserInRole("Administrator")) {
+                        <li>                         
+                            @Html.ActionLink("App Settings", "Index", "AppSetting", new { area = "" }, null)
+                        </li>
+                        <li>
+                            |
+                        </li>
+                        <li>                         
+                            @Html.ActionLink("Questionnaire", "Edit", "Questionnaire", new { area = "", id = 1 }, null)
+                        </li>
+                        <li>
+                            @Html.ActionLink("Sections", "Index", "QCategory", new { area = "" }, null)
+                        </li>
+                        <li>
+                            @Html.ActionLink("Questions", "Index", "Question", new { area = "" }, null)
+                        </li>
+                        <li>
+                            |
+                        </li>
+                        <li>
+                            @Html.ActionLink("Users", "Index", "Main", new { area = "SimpleMembershipAdministration" }, null)
+                        </li>
+                        <li>
+                            |
+                        </li>
+                        }
+                        @if (Roles.IsUserInRole("Verifier"))
+                        {
+                        <li>                         
+                            @Html.ActionLink("Verifications", "Index", "Verification", new { area = "" }, null)
+                        </li>
+                        }
+                        <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, null)</li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        
+
+        <div id="body">
+            @RenderSection("featured", required: false)
+            @*<section class="content-wrapper main-content clear-fix">*@
+                @RenderBody()
+            @*</section>*@
+            
+            
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
+                </div>
+            </div>
+        </footer>
+
+        
+        @Scripts.Render("~/bundles/jqueryui")
+        
+        @Styles.Render("~/Content/themes/start/css")
+        
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

@@ -1,0 +1,373 @@
+﻿@model Questionnaire2.ViewModels.QuestionnaireAppData
+
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/index.js")" type="text/javascript"></script>
+
+<h1><img src="~/Images/VDSS_logo_2013.png" style="float:left; width:60px;" />@ViewBag.Title</h1><br />
+<h4>@Html.Raw(ViewBag.Message)</h4>
+
+@*@using (Ajax.BeginForm(new AjaxOptions{ OnSuccess = "OnSuccess" }))*@
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id="appForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Application</legend>
+        
+        @if (!Model.Responses.Any())
+        {
+            <div>
+                There are currently no application sections open for editing. All sections have been submitted for Validation.<br />
+                You can view the status of your application's verification by selecting the "Status" menu item above.
+            </div>
+        }
+        else
+        {      
+            <div id="instructions">
+                <b>INSTRUCTIONS</b>
+                @*<span id="catInstructions"></span>*@
+                @foreach (var cat in Model.QCategories)
+                {
+                    @*<div id="ajaxSaved"></div>*@
+                    <div class="inst" hidden="hidden" id="@cat.QCategoryName">@Html.Raw(cat.Instructions)</div>
+                }
+        
+            </div>
+            <div id="accordion">
+                @{var qCategoryName = ""; var recordCount = 0; var totalRecords = Model.Responses.Count(); var sectionStart = false; var sectionNumber = 0; 
+                  }
+                @foreach (var response in Model.Responses)
+                {
+                    sectionStart = false;
+                    recordCount++;
+                    var str1 = "";
+                    var str2 = "";
+
+                    if (Request.Url != null)
+                    {
+                        var url = Request.Url.GetLeftPart(UriPartial.Authority) + Url.Content("~");
+
+                        if (response.QCategoryName != qCategoryName)
+                        {
+                            var startIndex = response.QCategoryName.Length;
+                            if (response.QCategoryName.IndexOf('(') != -1)
+                            {
+                                startIndex = response.QCategoryName.IndexOf('(') - 1;
+                            }
+                            var count = response.QCategoryName.Length - startIndex;
+                            var qCatName = response.QCategoryName.Remove(startIndex, count);
+                            var qCat = Model.QCategories.Where(x => x.QCategoryName == qCatName).SingleOrDefault();
+                            
+                            
+                            if (recordCount != 1)
+                            {
+                                
+                                    var aLink = Html.ActionLink("Upload Supporting Files", "Upload", "File", new
+                                    {
+                                        area = "",
+                                        questionnaireId = response.QuestionnaireId,
+                                        qCategoryName = response.QCategoryName + (response.SubOrdinal + 1),
+                                        activePanel = sectionNumber - 1,
+                                        QuestionnaireQCategoryId = response.QCategoryId,
+                                        qCategorySubOrdinal = response.SubOrdinal
+                                    }, null);
+
+                                    var addSection = Html.ActionLink("Add Another Section", "DuplicateQuestionnaireQCategory", "QuestionnaireQCategory", new
+                                    {
+                                        Ordinal = response.Ordinal
+                                    }, null);
+
+                                    str1 = "<tr><td><br /><br /></td></tr><tr><td colspan=\"2\"><table width=\"100%\"><tr><td width=\"33%\" style=\"text-align:center; padding: 3px\">";
+                                    if (qCat != null && qCat.Uploads == true)
+                                    {
+                                        str1 += aLink;
+                                    }
+                                    str1 += "</td><td width=\"34%\" style=\"text-align:center; padding: 3px\">";
+                                    if (qCat != null && qCat.Repeatable == true)
+                                    {
+                                        str1 += addSection;
+                                    }
+                                    str1 += "</td><td width=\"33%\" style=\"text-align:center; padding: 3px\"><span class=\"saveState\"></span></td></tr></table></td></tr>";                                                
+                                    str1 += "</table></div>";
+                                                               
+                            }
+                            str1 += "<h3><a href=\"#\"></a>" + response.QCategoryName;
+                            
+                            str1 += "</h3><div><table class=\"responseTable\">";
+                            sectionStart = true;
+                            sectionNumber++;
+                        }
+                        else
+                        {
+                            str1 = "";
+                        }
+                    }
+
+                    @Html.Raw(str1);
+                                   if (response.QTitle != null)
+                                   {
+                        <tr>
+                            <td class="responseItemTitle" colspan="2">                       
+                                @response.QTitle
+                            </td>
+                        </tr>
+                                   }
+                        <tr class="responseItem">                    
+                            <td class="responseItemText">
+                                @Html.ValueFor(model => response.QuestionText)
+                            </td>
+                            <td class="responseItemResponse">
+                                @if (response.QTypeResponse == "DropDown")
+                                {
+                                    var list = response.Answers.ToList();
+                                    var sV = -1;
+                                    var sT = "";
+                                    foreach (var l in list)
+                                    {
+                                        if (l.selectedValue == true)
+                                        {
+                                            sV = l.AnswerId;
+                                            sT = l.AnswerText;
+                                        }
+                                    }
+                                    var items = new SelectList(list, "AnswerText", "AnswerText", response.ResponseItem);
+                                    @Html.DropDownListFor(model => response.ResponseItem, items, "Select Item", new { @id = "QQC" + response.Ordinal + "ResponseItem" + recordCount, @Name = "model[" + (recordCount - 1) + "].ResponseItem" })
+                                }
+                                @if (response.QTypeResponse == "RadioButton")
+                                {
+                                    var list = response.Answers.ToList();
+                                    var sV = -1;
+                                    var sT = "";
+                                    foreach (var l in list)
+                                    {
+                                        if (l.selectedValue == true)
+                                        {
+                                            sV = l.AnswerId;
+                                            sT = l.AnswerText;
+                                        }
+                                    }
+
+                                    var items = new SelectList(list, "AnswerText", "AnswerText", response.ResponseItem);
+
+                                    foreach (var item in items)
+                                    {
+                                        @Html.RadioButtonFor(model => response.ResponseItem, item.Value, new { @Name = "model[" + (recordCount - 1) + "].ResponseItem", @id = "model[" + (@recordCount - 1) + "].ResponseItem" + item.Value })
+                                        @Html.Label(item.Value, item.Text)
+                                    }
+                                }
+                                @if (response.QTypeResponse == "FreeText")
+                                {
+                                    @Html.TextBoxFor(model => response.ResponseItem, null, new { @id = "QQC" + response.Ordinal + "ResponseItem" + recordCount, @Name = "model[" + (recordCount - 1) + "].ResponseItem" })
+                                }
+                                @if (response.QTypeResponse == "FreeTextMulti")
+                                {
+                                    @Html.TextAreaFor(model => response.ResponseItem, 5, 30, new { @id = "QQC" + response.Ordinal + "ResponseItem" + recordCount, @Name = "model[" + (recordCount - 1) + "].ResponseItem" })
+                                }
+                                @if (response.QTypeResponse == "Date")
+                                {
+                                    @Html.TextBoxFor(model => response.ResponseItem, null, new { @id = "QQC" + response.Ordinal + "ResponseItem" + recordCount, @class = "datefield", @Name = "model[" + (recordCount - 1) + "].ResponseItem" })
+                                }
+                                @Html.HiddenFor(model => response.QCategoryId, new { @id = "QQC" + response.Ordinal + "QCategoryId", @Name = "model[" + (recordCount - 1) + "].QCategoryId" })
+                                @Html.HiddenFor(model => response.QCategoryName, new { @id = "QQC" + response.Ordinal + "QCategoryName", @Name = "model[" + (recordCount - 1) + "].QCategoryName" })
+                                @Html.HiddenFor(model => response.Ordinal, new { @id = "QQC" + response.Ordinal + "Ordinal", @Name = "model[" + (recordCount - 1) + "].Ordinal" })
+                                @Html.HiddenFor(model => response.SubOrdinal, new { @id = "QQC" + response.Ordinal + "SubOrdinal", @Name = "model[" + (recordCount - 1) + "].SubOrdinal" })
+                                @Html.HiddenFor(model => response.QQOrd, new { @id = "QQC" + response.Ordinal + "QQOrd", @Name = "model[" + (recordCount - 1) + "].QQOrd" })
+                                @Html.HiddenFor(model => response.UserId, new { @id = "QQC" + response.Ordinal + "UserId", @Name = "model[" + (recordCount - 1) + "].UserId" })
+                                @Html.HiddenFor(model => response.QuestionnaireId, new { @id = "QQC" + response.Ordinal + "QuestionnaireId", @Name = "model[" + (recordCount - 1) + "].QuestionnaireId" })
+                                @Html.HiddenFor(model => response.QuestionnaireQuestionId, new { @id = "QQC" + response.Ordinal + "QuestionnaireQuestionId", @Name = "model[" + (recordCount - 1) + "].QuestionnaireQuestionId" })
+                                @Html.HiddenFor(model => response.QuestionId, new { @id = "QQC" + response.Ordinal + "QuestionId", @Name = "model[" + (recordCount - 1) + "].QuestionId" })
+                                @Html.HiddenFor(model => response.QuestionText, new { @id = "QQC" + response.Ordinal + "QuestionText", @Name = "model[" + (recordCount - 1) + "].QuestionText" })
+                                @Html.HiddenFor(model => response.QuestionnaireQCategoryId, new { @id = "QQC" + response.Ordinal + "QuestionnaireQCategoryId", @Name = "model[" + (recordCount - 1) + "].QuestionnaireQCategoryId" })
+                            </td>
+                            @if (sectionStart == true)
+                            {
+                            <td class="responseItemUpload" rowspan="50">
+                               
+                            </td>
+                            }
+                        </tr>  
+                            if (recordCount == totalRecords)
+                            {
+                                var startIndex = response.QCategoryName.Length;
+                                if (response.QCategoryName.IndexOf('(') != -1)
+                                {
+                                    startIndex = response.QCategoryName.IndexOf('(') - 1;
+                                }
+                                var count = response.QCategoryName.Length - startIndex;
+                                var qCatName = response.QCategoryName.Remove(startIndex, count);
+                                var qCat = Model.QCategories.Where(x => x.QCategoryName == qCatName).SingleOrDefault();
+                                
+                                var aLinkLast = Html.ActionLink("Upload Supporting Files", "Upload", "File", new
+                                {
+                                    area = "",
+                                    questionnaireId = response.QuestionnaireId,
+                                    qCategoryName = response.QCategoryName + (response.SubOrdinal + 1),
+                                    activePanel = sectionNumber - 1,
+                                    QuestionnaireQCategoryId = response.QCategoryId,
+                                    qCategorySubOrdinal = response.SubOrdinal
+                                }, null);
+
+                                var addSection = Html.ActionLink("Add Another Section", "DuplicateQuestionnaireQCategory", "QuestionnaireQCategory", new
+                                {
+                                    Ordinal = response.Ordinal
+                                }, null);
+
+                                str2 = "<tr><td><br /><br /></td></tr><tr><td align=left>";
+                                if (qCat != null && qCat.Uploads == true)
+                                {
+                                    str2 += aLinkLast;
+                                }
+                                str2 += "</td><td>";
+                                if (qCat != null && qCat.Repeatable == true)
+                                {
+                                    str2 += addSection;
+                                }
+                                str2 += "</td><td align=right><span class=\"saveState\"></span></td></tr>";
+                                str2 += "</table></div>";
+                                
+                            }
+                            else if (response.QCategoryName != qCategoryName)
+                            {
+                                qCategoryName = response.QCategoryName;
+                            }
+
+                            else
+                            {
+                                str2 = "";
+                            }
+                    @Html.Raw(str2);
+                }
+            </div>
+        }
+        
+        
+        
+        @*<div>@Html.ActionLink("Submit for Verification", "SendToVerification", "Verification", new { id = Model.UserId }, null)</div>*@
+    </fieldset>
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        //extension to get url variables
+        $.extend({
+            getUrlVars: function(){
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for(var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            },
+            getUrlVar: function(name){
+                return $.getUrlVars()[name];
+            }
+        });
+    
+        //open panel specified in url
+        var byName = $.getUrlVar('panel');
+
+        $(function () {
+            var accOpts = {
+                animate: 100,
+                heightStyle: "content"
+            }
+            $("#accordion").accordion(accOpts);
+            $("#accordion").accordion("option", "active", parseInt(byName));
+        });
+
+        //capture the click on the accordion h3 a tag
+        $("#accordion h3 a").click(function () {
+            window.location = $(this).attr('href');
+            return false;
+        });
+
+    
+    </script>
+    
+    <script type="text/javascript">     
+        $(document).ready(function () {
+            
+
+            var active = $("#accordion").accordion("option", "active");
+            var text = $("#accordion h3").eq(active).text();
+            var textRepl = text.replace("Add", "");
+            var textRepl2 = textRepl.replace(/\(\d+\)/g, "").trim();
+
+            $("#catInstructions").text(textRepl2);
+            $(".inst").hide();
+            $("div[id='" + textRepl2 + "']").show();
+
+            $("#accordion h3").click(function () {
+                var active = $("#accordion").accordion("option", "active");
+                var text = $("#accordion h3").eq(active).text();
+                var textRepl = text.replace("Add", "");
+                var textRepl2 = textRepl.replace(/\(\d+\)/g, "").trim();
+
+                $("#catInstructions").text(textRepl2);
+                $(".inst").hide();
+                $("div[id='" + textRepl2 + "']").show();
+                $.scrollTo(230);
+            });
+
+            
+        });
+
+        //$('.ui-accordion-header').bind('click', function () {
+        //    var text = this.text();
+        //    $("#instructions").text(text);
+
+        //    //$.scrollTo(0);
+        //});
+    </script>
+
+    <script type="text/javascript">
+        //change date fields to datepicker ui
+        $(document).ready(function () {
+            $(".datefield").datepicker();
+        });
+    </script>
+    
+    @*<script type="text/javascript">
+        $('input[type="text"]').change(NeedsSaving());
+
+        function OnSuccess(response) {
+            $("#ajaxSaved").text("Saved");
+        }
+        function NeedsSaving(response) {
+            $("#ajaxSaved").text("Needs Saving");
+        }
+    </script>*@
+
+    <script type="text/javascript">
+        var form_modified = false;
+
+        $(".saveState").text("Saved");
+
+        var interval = setInterval(function () {
+            if (form_modified == true) {
+                $("#appForm").submit();
+                form_modified = false;
+                $(".saveState").text("Saved");
+            }          
+        }, 5000);
+
+        $('select').on('change', function() {
+            form_modified = true;
+            $(".saveState").text("Saving");
+        }); // take care of select tags
+
+        $('input').on('change keypress', function() {
+            //alert("changes");
+            form_modified = true;
+            $(".saveState").text("Saving");
+        }); // take care of input: the change event take care of input of type "hidden"
+    </script>
+
+    
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+}
