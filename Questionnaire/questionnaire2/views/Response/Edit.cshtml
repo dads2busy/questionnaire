@@ -36,7 +36,7 @@
         
             </div>
             <div id="accordion">
-                @{var qCategoryName = ""; var recordCount = 0; var totalRecords = Model.Responses.Count(); var sectionStart = false; var sectionNumber = 0; 
+                @{var qCategoryName = ""; var recordCount = 0; var totalRecords = Model.Responses.Count(); var sectionStart = false; var sectionNumber = 0; var sectionCount = 0; MvcHtmlString addSection = MvcHtmlString.Empty; var qCat = Model.QCategories.FirstOrDefault();
                   }
                 @foreach (var response in Model.Responses)
                 {
@@ -51,9 +51,11 @@
                     if (Request.Url != null)
                     {
                         var url = Request.Url.GetLeftPart(UriPartial.Authority) + Url.Content("~");
-
+                        
                         if (response.QCategoryName != qCategoryName)
                         {
+                            sectionCount = Model.Responses.Where(o => o.Ordinal == response.Ordinal).Max(q => q.QQOrd);
+                            
                             var startIndex = response.QCategoryName.Length;
                             if (response.QCategoryName.IndexOf('(') != -1)
                             {
@@ -61,39 +63,42 @@
                             }
                             var count = response.QCategoryName.Length - startIndex;
                             var qCatName = response.QCategoryName.Remove(startIndex, count);
-                            var qCat = Model.QCategories.Where(x => x.QCategoryName == qCatName).SingleOrDefault();
+                            qCat = Model.QCategories.Where(x => x.QCategoryName == qCatName).SingleOrDefault();
                             
                             
                             if (recordCount != 1)
                             {
-                                
-                                    var aLink = Html.ActionLink("Upload Supporting Files", "Upload", "File", new
-                                    {
-                                        area = "",
-                                        questionnaireId = response.QuestionnaireId,
-                                        qCategoryName = response.QCategoryName + (response.SubOrdinal + 1),
-                                        activePanel = sectionNumber - 1,
-                                        QuestionnaireQCategoryId = response.QCategoryId,
-                                        qCategorySubOrdinal = response.SubOrdinal
-                                    }, null);
 
-                                    var addSection = Html.ActionLink("Add Another Section", "DuplicateQuestionnaireQCategory", "QuestionnaireQCategory", new
-                                    {
-                                        Ordinal = response.Ordinal
-                                    }, null);
+                                var aLink = Html.ActionLink("Upload Supporting Files", "Upload", "File", new
+                                {
+                                    area = "",
+                                    questionnaireId = response.QuestionnaireId,
+                                    qCategoryName = response.QCategoryName + (response.SubOrdinal + 1),
+                                    activePanel = sectionNumber - 1,
+                                    QuestionnaireQCategoryId = response.QCategoryId,
+                                    qCategorySubOrdinal = response.SubOrdinal
+                                }, null);
 
-                                    str1 = "<tr><td><br /><br /></td></tr><tr><td colspan=\"2\"><table width=\"100%\"><tr><td width=\"33%\" style=\"text-align:center; padding: 3px\">";
-                                    if (qCat != null && qCat.Uploads == true)
-                                    {
-                                        str1 += aLink;
-                                    }
-                                    str1 += "</td><td width=\"34%\" style=\"text-align:center; padding: 3px\">";
-                                    if (qCat != null && qCat.Repeatable == true)
-                                    {
-                                        str1 += addSection;
-                                    }
-                                    str1 += "</td><td width=\"33%\" style=\"text-align:center; padding: 3px\"><span class=\"saveState\"></span></td></tr></table></td></tr>";                                                
-                                    str1 += "</table></div>";
+                                addSection = Html.ActionLink("Add Another Section", "DuplicateQuestionnaireQCategory", "QuestionnaireQCategory", new
+                                {
+                                    Ordinal = response.Ordinal
+                                }, null);
+
+                            //        var testord = response.Ordinal;
+                            
+                            //        str1 = "<tr><td><br /><br /></td></tr><tr><td colspan=\"2\"><table width=\"100%\"><tr><td width=\"33%\" style=\"text-align:center; padding: 3px\">";
+                            //        if (qCat != null && qCat.Uploads == true)
+                            //        {
+                            //            str1 += aLink;
+                            //        }
+                            //        str1 += "</td><td width=\"34%\" style=\"text-align:center; padding: 3px\">";
+                            //        if (qCat != null && qCat.Repeatable == true)
+                            //        {
+                            //            str1 += addSection;
+                            //        }
+                            //        str1 += "</td><td width=\"33%\" style=\"text-align:center; padding: 3px\"><span class=\"saveState\"></span></td></tr></table></td></tr>";                                                
+                                str1 += "<tr><td colspan=3 style=\"text-align:right; padding: 3px\"><span class=\"saveState\"></tr>";
+                                str1 += "</table></div>";
                                                                
                             }
                             str1 += "<h3><a href=\"#\"></a>" + response.QCategoryName;
@@ -191,6 +196,13 @@
                             </td>
                             }
                         </tr>  
+                    if (response.QQOrd == sectionCount)
+                    {
+                        if (qCat != null && qCat.Repeatable == true)
+                        {
+                            @Html.Raw("<tr><td colspan=3>" + addSection + "</td></tr>");
+                        }
+                    }
                             if (recordCount == totalRecords)
                             {
                                 var startIndex = response.QCategoryName.Length;
@@ -200,7 +212,7 @@
                                 }
                                 var count = response.QCategoryName.Length - startIndex;
                                 var qCatName = response.QCategoryName.Remove(startIndex, count);
-                                var qCat = Model.QCategories.Where(x => x.QCategoryName == qCatName).SingleOrDefault();
+                                qCat = Model.QCategories.Where(x => x.QCategoryName == qCatName).SingleOrDefault();
                                 
                                 var aLinkLast = Html.ActionLink("Upload Supporting Files", "Upload", "File", new
                                 {
@@ -212,7 +224,7 @@
                                     qCategorySubOrdinal = response.SubOrdinal
                                 }, null);
 
-                                var addSection = Html.ActionLink("Add Another Section", "DuplicateQuestionnaireQCategory", "QuestionnaireQCategory", new
+                                addSection = Html.ActionLink("Add Another Section", "DuplicateQuestionnaireQCategory", "QuestionnaireQCategory", new
                                 {
                                     Ordinal = response.Ordinal
                                 }, null);
