@@ -10,6 +10,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebMatrix.WebData;
+using iTextSharp.text.pdf;
+using iTextSharp.text.html.simpleparser;
+using System.IO;
+using iTextSharp.text;
+using System.Net;
+using System.Text;
+using HtmlAgilityPack;
+using System.Net.Http;
 
 namespace Questionnaire2.Controllers
 {
@@ -21,11 +29,11 @@ namespace Questionnaire2.Controllers
 
         public ActionResult Index()
         {
-            var unverifiedUsers = new List<UserInfo>();
-            var unverifiedIds = _db.Verifications.Where(x => x.ItemVerified == false).Select(x => x.UserId).Distinct().ToList();
-            for (var i = 0; i < unverifiedIds.Count(); i++)
+            var users = new List<UserInfo>();
+            var userIds = _db.Verifications.Select(x => x.UserId).Distinct().ToList();
+            for (var i = 0; i < userIds.Count(); i++)
             {
-                var userInfo = new UserInfo {UserId = unverifiedIds[i]};
+                var userInfo = new UserInfo {UserId = userIds[i]};
                 userInfo.VerifiedCount = _db.Verifications.Count(x => x.UserId == userInfo.UserId && x.QuestionnaireId == 1 && x.ItemVerified);
                 userInfo.UnverifiedCount = _db.Verifications.Count(x => x.UserId == userInfo.UserId && x.QuestionnaireId == 1 && x.ItemVerified == false);
 
@@ -44,10 +52,81 @@ namespace Questionnaire2.Controllers
                 if (response != null)
                     userInfo.LastName = response.ResponseItem;
 
-                unverifiedUsers.Add(userInfo);
+                users.Add(userInfo);
             }
 
-            return View(unverifiedUsers);
+            var usersVerified = users.Where(x => x.UnverifiedCount == 0);
+            var usersUnverified = users.Where(x => x.UnverifiedCount != 0);
+
+            var userVerifications = new UserVerifications();
+            userVerifications.UsersVerified = usersVerified.ToList();
+            userVerifications.UsersUnverified = usersUnverified.ToList();
+
+            return View(userVerifications);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(RegisterExternalLoginModel mReg, string Command, int id = 0)
+        {
+
+            var users = new List<UserInfo>();
+            var userIds = _db.Verifications.Select(x => x.UserId).Distinct().ToList();
+            for (var i = 0; i < userIds.Count(); i++)
+            {
+                var userInfo = new UserInfo { UserId = userIds[i] };
+                userInfo.VerifiedCount = _db.Verifications.Count(x => x.UserId == userInfo.UserId && x.QuestionnaireId == 1 && x.ItemVerified);
+                userInfo.UnverifiedCount = _db.Verifications.Count(x => x.UserId == userInfo.UserId && x.QuestionnaireId == 1 && x.ItemVerified == false);
+
+                userInfo.Editable = !_db.Verifications.Any(
+                    x => x.UserId == userInfo.UserId && x.QuestionnaireId == 1 && x.Editable == false);
+
+                var firstOrDefault = _udb.UserProfiles.FirstOrDefault(x => x.UserId == userInfo.UserId);
+                if (firstOrDefault != null)
+                    userInfo.UserName = firstOrDefault.UserName;
+                var responses = _db.Responses.Where(x => x.UserId == userInfo.UserId && x.QCategoryName.ToUpper().Contains("PERSONAL"));
+
+                var orDefault = responses.FirstOrDefault(x => x.QuestionText.ToUpper().Contains("FIRST NAME"));
+                if (orDefault != null)
+                    userInfo.FirstName = orDefault.ResponseItem;
+                var response = responses.FirstOrDefault(x => x.QuestionText.ToUpper().Contains("LAST NAME"));
+                if (response != null)
+                    userInfo.LastName = response.ResponseItem;
+
+                users.Add(userInfo);
+            }
+
+            var usersVerified = users.Where(x => x.UnverifiedCount == 0);
+            var usersUnverified = users.Where(x => x.UnverifiedCount != 0);
+
+            var userVerifications = new UserVerifications();
+            userVerifications.UsersVerified = usersVerified.ToList();
+            userVerifications.UsersUnverified = usersUnverified.ToList();
+
+            var tableHtml = "<html><head></head><body><table>";
+            tableHtml += "<tr><td colspan=4><h1>User Verification Status</h1></td></tr>";
+            tableHtml += "<tr><td colspan=4><h2>Unverified Users</h2></td></tr>";
+            tableHtml += "<tr><th>First Name</th><th>Last Name</th><th>Username</th><th>Status</th></tr>";
+            foreach (var user in usersUnverified)
+            {
+                tableHtml += "<tr><td>" + user.FirstName + "</td>";
+                tableHtml += "<tr><td>" + user.LastName + "</td>";
+                tableHtml += "<tr><td>" + user.UserName + "</td>";
+                tableHtml += "<tr><td>" + user.VerifiedCount + "/" + user.UnverifiedCount  + "</td>";
+            }
+            tableHtml += "<tr><td colspan=4><h2>Verified Users</h2></td></tr>";
+            tableHtml += "<tr><th>First Name</th><th>Last Name</th><th>Username</th><th>Status</th></tr>";
+            foreach (var user in usersVerified)
+            {
+                tableHtml += "<tr><td>" + user.FirstName + "</td>";
+                tableHtml += "<tr><td>" + user.LastName + "</td>";
+                tableHtml += "<tr><td>" + user.UserName + "</td>";
+                tableHtml += "<tr><td>" + user.VerifiedCount + "/" + user.UnverifiedCount + "</td>";
+            }
+            tableHtml += "</table></body></html>";
+
+            tableToPdf(this, new EventArgs(), tableHtml);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Details(int id)
@@ -102,7 +181,7 @@ namespace Questionnaire2.Controllers
                         var verification = _db.Verifications.Single(x => x.QQCategoryId == qqCategoryId);
                         verification.ItemInfo = itemInfo;
                         verification.Editable = false;
-                        _db.Entry(verification).State = (EntityState)System.Data.EntityState.Modified;
+                        _db.Entry(verification).State = (EntityState)System.Data.Entity.EntityState.Modified;
                     }
                     else
                     {                      
@@ -207,7 +286,7 @@ namespace Questionnaire2.Controllers
             try
             {
                 // TODO: Add update logic here
-                _db.Entry(item.Verification).State = (EntityState) System.Data.EntityState.Modified;
+                _db.Entry(item.Verification).State = (EntityState) System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
                 return RedirectToAction("List", new { id = item.Verification.UserId });
             }
@@ -274,5 +353,78 @@ namespace Questionnaire2.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public void tableToPdf(object sender, EventArgs e, string pageHtml)
+        {
+            //var table = document.GetElementbyId("verificationsTable");
+            
+            //Set page size as A4
+            Document pdfDoc = new Document(PageSize.A4, 20, 10, 10, 10);
+
+            try
+            {
+                var ms = new MemoryStream();
+                PdfWriter.GetInstance(pdfDoc, ms);
+
+                //Open PDF Document to write data
+                pdfDoc.Open();
+
+                ////Assign Html content in a string to write in PDF
+                //string contents = "";
+
+                //StreamReader sr;
+                //try
+                //{
+                //    //Read file from server path
+                //    sr = System.IO.File.OpenText(Server.MapPath("~/sample.html"));
+                //    //store content in the variable
+                //    contents = sr.ReadToEnd();
+                //    sr.Close();
+                //}
+                //catch (Exception ex)
+                //{
+
+                //}
+
+                //Read string contents using stream reader and convert html to parsed conent
+                var parsedHtmlElements = HTMLWorker.ParseToList(new StringReader(pageHtml), null);
+
+                //Get each array values from parsed elements and add to the PDF document
+                foreach (var htmlElement in parsedHtmlElements)
+                    pdfDoc.Add(htmlElement as IElement);
+
+                //Close your PDF
+                pdfDoc.Close();
+
+                var ms2 = new MemoryStream(ms.ToArray());
+
+                Response.Buffer = true;
+                Response.ContentType = "application/pdf";
+                //Set default file Name as current datetime
+                Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("yyyyMMdd") + ".pdf");
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+
+                ms2.WriteTo(Response.OutputStream);
+                Response.End();
+
+            }
+            catch (Exception ex)
+            {
+                Response.Write(ex.ToString());
+            }
+        }
+
+        public string GetHtmlPage(string strURL)
+        {
+            String strResult;
+            WebRequest objRequest = WebRequest.Create(strURL);
+            WebResponse objResponse = objRequest.GetResponse();
+            using (var sr = new StreamReader(objResponse.GetResponseStream()))
+            {
+                strResult = sr.ReadToEnd();
+                sr.Close();
+            }
+            return strResult;
+        }     
     }
 }

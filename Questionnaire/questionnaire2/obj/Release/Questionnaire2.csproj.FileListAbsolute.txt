@@ -219,4 +219,9 @@ C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\obj\Release\Questionnaire2.Migrations.uploas.resources
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\itextsharp.dll
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\itextsharp.xml
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Aspose.Words.dll
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\Aspose.Words.xml
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\HtmlAgilityPack.dll
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\HtmlAgilityPack.pdb
+C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\bin\HtmlAgilityPack.xml
 C:\Users\aaron\Documents\Visual Studio 2013\Projects\Questionnaire\Questionnaire\Questionnaire2\obj\Release\Questionnaire2.csprojResolveAssemblyReference.cache

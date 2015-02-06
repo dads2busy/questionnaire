@@ -14,6 +14,8 @@ using iTextSharp.text.pdf;
 using System;
 using System.Web;
 using System.Text;
+using Aspose.Words;
+using Aspose.Words.Saving;
 
 namespace Questionnaire2.Controllers
 {
@@ -90,20 +92,16 @@ namespace Questionnaire2.Controllers
                     var formatted = fui.Format();
                     var ms = MakeWordFile.CreateDocument(formatted);
                     var ms2 = new MemoryStream(ms.ToArray());
-                    var textStr = Encoding.ASCII.GetString(ms.ToArray());
-                    
-                    Document pdfDoc = new Document(PageSize.A4, 25, 10, 25, 10);
-                    PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
-                    pdfDoc.Open();
-                    Paragraph Text = new Paragraph(textStr);
-                    pdfDoc.Add(Text);
-                    pdfWriter.CloseStream = false;
-                    pdfDoc.Close();
-                    Response.Buffer = true;
+
+                    Aspose.Words.Document doc = new Aspose.Words.Document(ms2);
+                    var ms3 = new MemoryStream();
+                    doc.Save(ms3, SaveFormat.Pdf);
+
+                    Response.Clear();
                     Response.ContentType = "application/pdf";
-                    Response.AddHeader("content-disposition", "attachment;filename=Example.pdf");
-                    Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                    Response.Write(pdfDoc);
+                    Response.AddHeader("content-disposition", "attachment; filename=\"Portfolio.pdf\"");
+
+                    ms3.WriteTo(Response.OutputStream);
                     Response.End();
                 }
                 catch (Exception ex)

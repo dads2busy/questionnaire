@@ -47,6 +47,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.Words">
+      <HintPath>..\packages\Aspose.Words.14.12.0\lib\net3.5-client\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="DocX">
       <HintPath>..\packages\DocX.1.0.0.13\lib\net40\DocX.dll</HintPath>
     </Reference>
@@ -76,11 +79,14 @@
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\packages\iTextSharp.5.5.4\lib\itextsharp.dll</HintPath>
@@ -104,7 +110,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -213,6 +218,7 @@
     <Compile Include="Controllers\CareProviderController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\QCategoryController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
@@ -296,6 +302,7 @@
     <Compile Include="ViewModels\QuestionnaireEditData.cs" />
     <Compile Include="ViewModels\QuestionnaireIndexData.cs" />
     <Compile Include="ViewModels\UserInfo.cs" />
+    <Compile Include="ViewModels\UserVerifications.cs" />
     <Compile Include="ViewModels\VmVerificationItems.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -423,6 +430,7 @@
     <Content Include="Images\Stripe.PNG" />
     <Content Include="Images\topnav.png" />
     <Content Include="Images\VDSS_logo_2013.png" />
+    <Content Include="sample.html" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery-1.11.1.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -746,7 +754,6 @@
     <Content Include="Views\File\Upload.cshtml" />
     <Content Include="Views\File\WordFile2Pdf.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\QCategory\Create.cshtml" />
     <Content Include="Views\QCategory\Delete.cshtml" />
@@ -781,11 +788,13 @@
     <Content Include="Views\Verifier\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Verification\SendToVerification.cshtml" />
-    <Content Include="Views\Verification\Index.cshtml" />
     <Content Include="Views\Verification\List.cshtml" />
     <Content Include="Views\Verification\Edit.cshtml" />
     <Content Include="Views\Verification\Verification.cshtml" />
     <Content Include="Views\Response\_AjaxTest.cshtml" />
+    <Content Include="Views\Verification\Index.cshtml" />
+    <Content Include="Views\Info\Index.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,0 +1,27 @@
+﻿
+@model IList<Questionnaire2.Models.AppSetting>
+
+<h2>Resources</h2>
+<div class="pageIntro">
+    <table>
+        <tr>
+            <td colspan="3">
+                @Html.Raw(Model.Where(XhtmlMobileDocType => XhtmlMobileDocType.AppSettingName == "Notices").FirstOrDefault().AppSettingValue)
+            </td>
+        </tr>
+        <tr style="vertical-align: top;">
+            <td style="width: 48%;">
+                @Html.Raw(Model.Where(XhtmlMobileDocType => XhtmlMobileDocType.AppSettingName == "Useful Links").FirstOrDefault().AppSettingValue)
+            </td>
+            <td style ="width: 4%;">
+                @Html.Raw(" ")
+            </tdstyle>
+            <td style="width: 48%;">
+                @Html.Raw(Model.Where(XhtmlMobileDocType => XhtmlMobileDocType.AppSettingName == "Useful Documents").FirstOrDefault().AppSettingValue)
+            </td>
+        </tr>
+    </table>
+    
+</div>
+
+

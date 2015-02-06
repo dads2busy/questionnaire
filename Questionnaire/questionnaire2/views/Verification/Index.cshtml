@@ -1,29 +1,80 @@
-﻿@model IEnumerable<Questionnaire2.ViewModels.UserInfo>
+﻿@model Questionnaire2.ViewModels.UserVerifications
 
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Users Awaiting Verification</h2>
-
-<table style="width: 50%">
+<table id="verificationsTable" style="width: 75%">
+    <tr>
+        <td colspan="5">
+            <h2>User Verification Status: Verified = @Html.Raw(Model.UsersVerified.Count()) Unverified = @Html.Raw(Model.UsersUnverified.Count())</h2>
+            @using (Html.BeginForm()) {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                    <input type="submit" id="btnPdf" name="Command" value="Pdf" />
+                }
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5">
+            <h3><u>Unverified Users:</u></h3>
+        </td>
+    </tr>
+@foreach (var item in Model.UsersUnverified)
+{
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().UserName)
+            @Html.DisplayNameFor(model => model.UsersUnverified.FirstOrDefault().UserName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().FirstName)
+            @Html.DisplayNameFor(model => model.UsersUnverified.FirstOrDefault().FirstName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().LastName)
+            @Html.DisplayNameFor(model => model.UsersUnverified.FirstOrDefault().LastName)
+        </th>
+        <th>
+            Status
+        </th>
+        <th></th>
+    </tr>   
+    <tr>
+        <td>
+            @Html.HiddenFor(modelItem => item.UserId)
+            @Html.Raw(item.UserName)
+        </td>
+        <td>
+            @Html.Raw(item.FirstName)
+        </td>
+        <td>
+            @Html.Raw(item.LastName)
+        </td>
+        <td>
+            @Html.Raw(item.VerifiedCount)/@Html.Raw(item.VerifiedCount + item.UnverifiedCount)
+        </td>
+        <td>
+            @Html.ActionLink("Application", "List", new { id = item.UserId })
+            @* | @Html.ActionLink("Delete", "Delete", new { id=item.UserId })*@
+        </td>
+    </tr>
+}
+
+
+    <tr>
+        <td colspan="5"><h3><u>Verified Users</u></h3></td>
+    </tr>
+@foreach (var item in Model.UsersVerified)
+{
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UsersVerified.FirstOrDefault().UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UsersVerified.FirstOrDefault().FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UsersVerified.FirstOrDefault().LastName)
         </th>
         <th>
             Status
         </th>
         <th></th>
     </tr>
-
-@foreach (var item in Model) {
     <tr>
         <td>
             @Html.HiddenFor(modelItem => item.UserId)
